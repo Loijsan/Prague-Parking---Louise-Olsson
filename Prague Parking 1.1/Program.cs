@@ -585,11 +585,19 @@ namespace Prague_Parking_1._0
                                 }
                                 else if (ParkingList[j].Contains("mc") && !ParkingList[j].Contains(", "))
                                 {
-                                    ParkingList[j] = ParkingList[j] + ", " + ParkingList[spaces];
-                                    ParkingList[spaces] = null;
-                                    j = j + 1;
-                                    moveThese[counter] = "\nMove mc " + mcReg + " to parking spot " + j;
-                                    break;
+                                    if (ParkingList[j] != ParkingList[spaces])
+                                    {
+                                        ParkingList[j] = ParkingList[j] + ", " + ParkingList[spaces];
+                                        ParkingList[spaces] = null;
+                                        j = j + 1;
+                                        moveThese[counter] = "\nMove mc " + mcReg + " to parking spot " + j;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        something = 2;
+                                        Console.WriteLine(something);
+                                    }
                                 }
 
                                 else
