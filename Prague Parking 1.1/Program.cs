@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace Prague_Parking_1._0
+namespace Prague_Parking_1._1
 {
     class Program
     {
@@ -125,6 +125,19 @@ namespace Prague_Parking_1._0
                 mcPark = ParkMc();
                 Console.WriteLine(mcPark);
             }
+
+            // If the code below is enabled it fills all the parking spots with single mc:s when the user types "all", 
+            // but this is just to test the functionallity of the full parking lot and the optimization part.
+
+            else if (park == "all")
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    int spot = i + 1;
+                    string spotReceipt = "mc!A" + spot;
+                    SpotAllocation(spot, spotReceipt);
+                }
+            }
             else { ParkVehicle(); }
 
             Console.WriteLine("\n\n\nPress any key to return to the main menu");
@@ -179,7 +192,16 @@ namespace Prague_Parking_1._0
                 counter = counter + 1;
                 if (element == null)
                 {
-                    break;
+                    emptySpot = counter;
+                    return emptySpot;
+                }
+                else if (counter == 100)
+                {
+                    Console.WriteLine("There are no available spots");
+                    Console.WriteLine("\n\n\nPress any key to return to the main menu");
+                    Console.ReadKey();
+                    Console.Clear();
+                    MainMenu();
                 }
             }
             emptySpot = counter;
@@ -397,10 +419,19 @@ namespace Prague_Parking_1._0
                 Console.Clear();
                 MainMenu();
             }
-            Console.WriteLine("\n(If you don´t want to move the vehicle, just type in its current spot, don´t mind the error message)");
+            Console.WriteLine("\n(If you don´t want to move the vehicle, just type in \"no\")");
             Console.Write("\n\nWhich spot would you like to move it to?: ");
 
             string spotSugestion = (Console.ReadLine());
+            
+            if (spotSugestion == "no")
+            {
+                Console.WriteLine("\n\n\nOk! No changes have been made, Press any key to return to the main menu");
+                Console.ReadKey();
+                Console.Clear();
+                MainMenu();
+            }
+
             int newSpot;
             bool noNumber = int.TryParse(spotSugestion, out newSpot);
             if (newSpot <= 100 && newSpot >= 1)
@@ -576,7 +607,7 @@ namespace Prague_Parking_1._0
                             string[] splitter = ParkingList[spaces].Split("!");
                             string mcReg = splitter[1];
 
-                            for (int j = 0; j <= 99; j++)
+                            for (int j = 0; j < ParkingList.Length; j++)
                             {
                                 if (ParkingList[j] == null)
                                 {
@@ -596,7 +627,6 @@ namespace Prague_Parking_1._0
                                     else
                                     {
                                         something = 2;
-                                        Console.WriteLine(something);
                                     }
                                 }
 
@@ -609,19 +639,19 @@ namespace Prague_Parking_1._0
 
                     }
                 }
-                int content = 0;
+                int moveCounter = 0; // Claes, fick inte ditt förslag att fungera, jag får söka mer på det och kommer lära mig mer om det till kommande projekt! Trevlig helg :)
                 foreach (var move in moveThese)
-                {
-                    if (move != null)
                     {
-                        Console.WriteLine(move);
-                        content = content + 1;
+                        if (move != null)
+                        {
+                            Console.WriteLine(move);
+                            moveCounter = 1;
+                        }
                     }
-                }
-                if (content == 0)
+                if (moveCounter == 0)
                 {
                     Console.WriteLine("\nThere is no need for optimization");
-                }
+                }   
             }
             else
             {

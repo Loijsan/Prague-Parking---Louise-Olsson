@@ -177,7 +177,16 @@ namespace Prague_Parking_1._0
                 counter = counter + 1;
                 if (element == null)
                 {
-                    break;
+                    emptySpot = counter;
+                    return emptySpot;
+                }
+                else if (counter == 100)
+                {
+                    Console.WriteLine("There are no available spots");
+                    Console.WriteLine("\n\n\nPress any key to return to the main menu");
+                    Console.ReadKey();
+                    Console.Clear();
+                    MainMenu();
                 }
             }
             emptySpot = counter;
@@ -395,10 +404,19 @@ namespace Prague_Parking_1._0
                 Console.Clear();
                 MainMenu();
             }
-            Console.WriteLine("\n(If you don´t want to move the vehicle, just type in its current spot, don´t mind the error message)");
+            Console.WriteLine("\n(If you don´t want to move the vehicle, just type in \"no\")");
             Console.Write("\n\nWhich spot would you like to move it to?: ");
 
             string spotSugestion = (Console.ReadLine());
+
+            if (spotSugestion == "no")
+            {
+                Console.WriteLine("\n\n\nOk! No changes have been made, Press any key to return to the main menu");
+                Console.ReadKey();
+                Console.Clear();
+                MainMenu();
+            }
+
             int newSpot;
             bool noNumber = int.TryParse(spotSugestion, out newSpot);
             if (newSpot <= 100 && newSpot >= 1)
