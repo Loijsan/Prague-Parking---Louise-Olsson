@@ -584,7 +584,6 @@ namespace Prague_Parking_1._1
             Console.Clear();
             Console.Write("5. Optimize the mc:s in the parkinglot  \n\nWould you like to move together the singleparked motorcycles of the parking lot? ");
             string optimize = Console.ReadLine();
-            int occupied = 0;
             int i;
             int spaces;
             string[] moveThese = new string[100];
@@ -595,10 +594,9 @@ namespace Prague_Parking_1._1
                 for (i = 100; i > 0; i--)
                 {
                     spaces = i - 1;
-                    occupied = SpaceSearcher(spaces);
-                    int something;
+                    bool Occupied = SpaceSearcher(spaces);
 
-                    if (occupied == 1)
+                    if (Occupied)
                     {
                         counter = counter + 1;
 
@@ -607,51 +605,41 @@ namespace Prague_Parking_1._1
                             string[] splitter = ParkingList[spaces].Split("!");
                             string mcReg = splitter[1];
 
-                            for (int j = 0; j < ParkingList.Length; j++)
+                            for (int j = 0; j <= (ParkingList.Length - 1); j++)
                             {
-                                if (ParkingList[j] == null)
+                                if (ParkingList[j].Contains("mc") && !ParkingList[j].Contains(", "))
                                 {
-                                    something = 1;
-                                    break;
-                                }
-                                else if (ParkingList[j].Contains("mc") && !ParkingList[j].Contains(", "))
-                                {
-                                    if (ParkingList[j] != ParkingList[spaces])
+                                    if (spaces != j)
                                     {
                                         ParkingList[j] = ParkingList[j] + ", " + ParkingList[spaces];
                                         ParkingList[spaces] = null;
                                         j = j + 1;
                                         moveThese[counter] = "\nMove mc " + mcReg + " to parking spot " + j;
-                                        break;
                                     }
-                                    else
-                                    {
-                                        something = 2;
-                                    }
+
+                                    break; // Denna break ligger här för att jag har två loopar och jag vill att den ska hoppa ur den inre när den gjort sin sak. 
+                                    // Det är kanske inte den snyggaste kodningen, men jag är nybörjare och koden fungerar ;)
                                 }
 
-                                else
-                                {
-                                    something = 1;
-                                }
                             }
                         }
 
                     }
                 }
-                int moveCounter = 0; // Claes, fick inte ditt förslag att fungera, jag får söka mer på det och kommer lära mig mer om det till kommande projekt! Trevlig helg :)
-                foreach (var move in moveThese)
+                if (moveThese.Length > 0)
+                {
+                    foreach (var move in moveThese)
                     {
                         if (move != null)
                         {
                             Console.WriteLine(move);
-                            moveCounter = 1;
                         }
                     }
-                if (moveCounter == 0)
+                }
+                else
                 {
                     Console.WriteLine("\nThere is no need for optimization");
-                }   
+                }
             }
             else
             {
@@ -663,19 +651,17 @@ namespace Prague_Parking_1._1
             Console.Clear();
             MainMenu();
 
-            static int SpaceSearcher(int placeRequest)
+            static bool SpaceSearcher(int placeRequest)
             {
-                int free;
+
 
                 if (ParkingList[placeRequest] == null)
                 {
-                    free = 0;
-                    return free;
+                    return false;
                 }
                 else
                 {
-                    free = 1;
-                    return free;
+                    return true;
                 }
             }
         }
